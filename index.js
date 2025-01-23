@@ -1,92 +1,84 @@
-console.log("hello world");
-let humanScore=0;
-let computerScore=0;
+let playerScore = 0;
+let computerScore = 0;
+
 function getComputerChoice() {
-    let num = Math.random(); // Call Math.random() to get a random number between 0 and 1
-    
-    if (num < 0.33) {
-        return "rock";
-    } else if (num < 0.66) {
-        return "paper";
-    } else {
-        return "scissors";
-    }
+    const choices = ["rock", "paper", "scissors"];
+    const randomIndex = Math.floor(Math.random() * choices.length);
+    return choices[randomIndex];
 }
 
-function getHumanChoice(){
-    let choice = prompt("Enter your choice  “rock”, “paper” or “scissors”. ");
-    return choice;
-}
-function playRound(humanChoice, computerChoice) {
-    // your code here!
-    if (humanChoice === computerChoice) {
+function playRound(playerSelection, computerSelection) {
+    if (playerSelection === computerSelection) {
         return "It's a tie!";
     }
 
     if (
-        (humanChoice === 'rock' && computerChoice === 'scissors') ||
-        (humanChoice === 'scissors' && computerChoice === 'paper') ||
-        (humanChoice === 'paper' && computerChoice === 'rock')
+        (playerSelection === "rock" && computerSelection === "scissors") ||
+        (playerSelection === "scissors" && computerSelection === "paper") ||
+        (playerSelection === "paper" && computerSelection === "rock")
     ) {
-        
-        return "You win!";
-
+        playerScore++;
+        return "You win this round!";
     } else {
-       
-        return "Computer wins!";
-    }
-  }
-  
-  const humanSelection = getHumanChoice();
-  const computerSelection = getComputerChoice();
-  
-  playRound(humanSelection, computerSelection);
-  // Function to play 5 rounds
-function playGame() {
-    let playerScore = 0;
-    let computerScore = 0;
-    
-    // Loop to play 5 rounds
-    for (let i = 0; i < 5; i++) {
-        const playerChoice = prompt("Enter rock, paper, or scissors:").toLowerCase();
-        
-        // Ensure player enters a valid option
-        if (!['rock', 'paper', 'scissors'].includes(playerChoice)) {
-            console.log("Invalid choice, please try again.");
-            i--; // Repeat this round if the input is invalid
-            continue;
-        }
-
-        const computerChoice = getComputerChoice();
-        console.log(`Round ${i + 1}: You chose: ${playerChoice}`);
-        console.log(`Round ${i + 1}: Computer chose: ${computerChoice}`);
-
-        const result = playRound(playerChoice, computerChoice);
-        console.log(result);
-
-        // Update scores based on the result
-        if (result === "You win!") {
-            playerScore++;
-        } else if (result === "Computer wins!") {
-            computerScore++;
-        }
-    }
-
-    // Display the final scores after 5 rounds
-    console.log("Final Results:");
-    console.log(`Player Score: ${playerScore}`);
-    console.log(`Computer Score: ${computerScore}`);
-
-    // Determine and display the overall winner
-    if (playerScore > computerScore) {
-        console.log("You are the overall winner!");
-    } else if (computerScore > playerScore) {
-        console.log("The computer is the overall winner!");
-    } else {
-        console.log("It's an overall tie!");
+        computerScore++;
+        return "Computer wins this round!";
     }
 }
 
-// Run the game
-playGame();
-  
+function updateScores() {
+    document.getElementById("player-score").textContent = playerScore;
+    document.getElementById("computer-score").textContent = computerScore;
+}
+
+function checkWinner() {
+    const winnerAnnouncement = document.getElementById("winner-announcement");
+    if (playerScore === 5) {
+        winnerAnnouncement.textContent = "Congratulations! You are the winner!";
+        endGame();
+    } else if (computerScore === 5) {
+        winnerAnnouncement.textContent = "Game Over! The computer wins.";
+        endGame();
+    }
+}
+
+function endGame() {
+    disableButtons();
+    document.getElementById("play-again").style.display = "block"; // Show the "Play Again" button
+}
+
+function disableButtons() {
+    document.getElementById("rock").disabled = true;
+    document.getElementById("paper").disabled = true;
+    document.getElementById("scissors").disabled = true;
+}
+
+function enableButtons() {
+    document.getElementById("rock").disabled = false;
+    document.getElementById("paper").disabled = false;
+    document.getElementById("scissors").disabled = false;
+}
+
+function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    updateScores();
+    document.getElementById("round-result").textContent = "";
+    document.getElementById("winner-announcement").textContent = "";
+    document.getElementById("play-again").style.display = "none"; // Hide the "Play Again" button
+    enableButtons();
+}
+
+function handleButtonClick(event) {
+    const playerSelection = event.target.id;
+    const computerSelection = getComputerChoice();
+    const roundResult = playRound(playerSelection, computerSelection);
+
+    document.getElementById("round-result").textContent = `You chose ${playerSelection}, computer chose ${computerSelection}. ${roundResult}`;
+    updateScores();
+    checkWinner();
+}
+
+document.getElementById("rock").addEventListener("click", handleButtonClick);
+document.getElementById("paper").addEventListener("click", handleButtonClick);
+document.getElementById("scissors").addEventListener("click", handleButtonClick);
+document.getElementById("restart").addEventListener("click", resetGame);

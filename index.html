@@ -1,12 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body style="display: flex; justify-content: center">
+        <section
+            style="
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                width: 250px;
+            "
+        >
+            <h1>Rock Paper Scissors!</h1>
+            <h2>Select option</h2>
+            <div id="options" style="display: flex; gap: 20px">
+                <button id="rock">Rock</button>
+                <button id="paper">Paper</button>
+                <button id="scissors">Scissors</button>
+            </div>
+            <div id="results">
+                <p id="round-result"></p>
+                <p>Player Score: <span id="player-score">0</span></p>
+                <p>Computer Score: <span id="computer-score">0</span></p>
+                <p id="winner-announcement"></p>
+            </div>
+            <div id="play-again" style="display: none;">
+                <button id="restart">Play Again</button>
+            </div>
+        </section>
 
-   <script src="index.js"></script> 
-</body>
+        <script src="index.js"></script>
+    </body>
 </html>
